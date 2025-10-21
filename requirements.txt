@@ -1,22 +1,15 @@
-# GUI
-PyQt6==6.6.1
-PyQt6-Qt6==6.6.1
+# Desktop GUI
+PyQt6>=6.6.0
 
-# Async & HTTP
-aiohttp==3.9.1
-websockets==12.0
+# Async HTTP for Polymarket API
+aiohttp>=3.9.0
 
-# Polymarket SDK
-py-clob-client==0.25.0
+# Configuration
+pyyaml>=6.0.0
+python-dotenv>=1.0.0
 
-# Blockchain (for real mode)
-web3==6.15.1
-eth-account==0.10.0
+# Polymarket SDK (for future real mode)
+py-clob-client>=0.25.0
 
-# Utilities
-python-dotenv==1.0.0
-pyyaml==6.0.1
-requests==2.31.0
-
-# Logging
-colorlog==6.8.0
+# Blockchain (for future real mode)
+web3>=6.15.0

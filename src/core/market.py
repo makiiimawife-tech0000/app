@@ -1,10 +1,8 @@
-"""Market data fetching and monitoring"""
+"""Market data fetching and real-time price monitoring"""
 import asyncio
 import aiohttp
-import json
 from typing import List, Dict, Optional, Callable
 from dataclasses import dataclass
-import websockets
 from ..utils.logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -15,183 +13,216 @@ class Market:
     """Represents a Polymarket market"""
     id: str
     question: str
+    condition_id: str
+    yes_token_id: str = ""
+    no_token_id: str = ""
     yes_price: float = 0.0
     no_price: float = 0.0
     active: bool = True
-    end_date: Optional[str] = None
     
     def __str__(self):
-        return f"{self.question} (YES: ${self.yes_price:.2f}, NO: ${self.no_price:.2f})"
+        return f"{self.question} (YES: ${self.yes_price:.4f}, NO: ${self.no_price:.4f})"
 
 
-class MarketDataFetcher:
-    """Fetches market data from Polymarket API"""
+class PolymarketAPI:
+    """Real-time Polymarket API integration"""
     
-    def __init__(self, api_url: str = "https://gamma-api.polymarket.com", clob_url: str = "https://clob.polymarket.com"):
-        self.api_url = api_url
-        self.clob_url = clob_url
+    def __init__(self):
+        self.gamma_api = "https://gamma-api.polymarket.com"
+        self.clob_api = "https://clob.polymarket.com"
         self.session: Optional[aiohttp.ClientSession] = None
     
     async def _ensure_session(self):
         """Ensure aiohttp session exists"""
         if self.session is None or self.session.closed:
-            self.session = aiohttp.ClientSession()
+            timeout = aiohttp.ClientTimeout(total=10)
+            self.session = aiohttp.ClientSession(timeout=timeout)
     
     async def close(self):
         """Close aiohttp session"""
         if self.session and not self.session.closed:
             await self.session.close()
     
-    async def fetch_markets(self, limit: int = 100) -> List[Market]:
-        """
-        Fetch active markets from Polymarket
-        
-        Args:
-            limit: Maximum number of markets to fetch
-            
-        Returns:
-            List of Market objects
-        """
+    async def fetch_markets(self, limit: int = 50) -> List[Market]:
+        """Fetch active markets from Polymarket"""
         await self._ensure_session()
         
         try:
-            # Fetch from Gamma API (simpler structure)
-            url = f"{self.api_url}/markets"
+            url = f"{self.gamma_api}/markets"
             params = {
                 "limit": limit,
                 "active": "true",
-                "closed": "false"
+                "closed": "false",
+                "archived": "false"
             }
             
-            logger.info(f"Fetching markets from {url}")
+            logger.info(f"Fetching {limit} markets from Polymarket...")
             
-            async with self.session.get(url, params=params, timeout=10) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    markets = []
-                    
-                    # Parse markets
-                    for item in data[:limit]:
-                        try:
-                            market = Market(
-                                id=item.get('id', item.get('condition_id', '')),
-                                question=item.get('question', 'Unknown Market'),
-                                active=item.get('active', True),
-                                end_date=item.get('end_date_iso')
-                            )
-                            markets.append(market)
-                        except Exception as e:
-                            logger.warning(f"Error parsing market: {e}")
-                            continue
-                    
-                    logger.info(f"Fetched {len(markets)} markets")
-                    return markets
-                else:
+            async with self.session.get(url, params=params) as response:
+                if response.status != 200:
                     logger.error(f"Failed to fetch markets: HTTP {response.status}")
                     return []
-                    
+                
+                data = await response.json()
+                markets = []
+                
+                for item in data[:limit]:
+                    try:
+                        # Extract market data
+                        market_id = item.get('id', '')
+                        condition_id = item.get('condition_id', item.get('conditionId', ''))
+                        question = item.get('question', 'Unknown Market')
+                        
+                        # Get token IDs from outcomes
+                        tokens = item.get('tokens', [])
+                        yes_token = tokens[0].get('token_id', '') if len(tokens) > 0 else ''
+                        no_token = tokens[1].get('token_id', '') if len(tokens) > 1 else ''
+                        
+                        market = Market(
+                            id=market_id,
+                            question=question,
+                            condition_id=condition_id,
+                            yes_token_id=yes_token,
+                            no_token_id=no_token,
+                            active=item.get('active', True)
+                        )
+                        markets.append(market)
+                    except Exception as e:
+                        logger.warning(f"Error parsing market: {e}")
+                        continue
+                
+                logger.info(f"✓ Fetched {len(markets)} markets")
+                return markets
+                
         except Exception as e:
             logger.error(f"Error fetching markets: {e}")
             return []
     
-    async def get_market_prices(self, market_id: str) -> Optional[Dict[str, float]]:
-        """
-        Get current prices for a specific market
-        
-        Args:
-            market_id: Market identifier
-            
-        Returns:
-            Dict with 'yes' and 'no' prices, or None
-        """
+    async def get_live_prices(self, token_id: str) -> Optional[Dict[str, float]]:
+        """Get real-time price for a specific token"""
         await self._ensure_session()
         
         try:
-            # Try CLOB API for price data
-            url = f"{self.clob_url}/prices"
-            params = {"market": market_id}
+            url = f"{self.clob_api}/price"
+            params = {"token_id": token_id}
             
-            async with self.session.get(url, params=params, timeout=5) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    
-                    # Parse prices (structure varies)
-                    if isinstance(data, dict):
-                        yes_price = float(data.get('yes', data.get('YES', 0.5)))
-                        no_price = float(data.get('no', data.get('NO', 0.5)))
-                        
-                        return {
-                            'yes': yes_price,
-                            'no': no_price
-                        }
+            async with self.session.get(url, params=params) as response:
+                if response.status != 200:
+                    return None
+                
+                data = await response.json()
+                
+                # Extract mid price (average of bid/ask)
+                mid_price = float(data.get('mid', data.get('price', 0)))
+                
+                return {
+                    'price': mid_price,
+                    'bid': float(data.get('bid', mid_price)),
+                    'ask': float(data.get('ask', mid_price))
+                }
+                
         except Exception as e:
-            logger.warning(f"Error fetching prices for {market_id}: {e}")
-        
-        # Return default prices if fetch fails
-        return {'yes': 0.5, 'no': 0.5}
+            logger.debug(f"Error fetching price for {token_id}: {e}")
+            return None
     
-    async def search_markets(self, query: str, markets: List[Market]) -> List[Market]:
-        """
-        Search markets by query string
+    async def get_market_prices(self, market: Market) -> tuple[float, float]:
+        """Get current YES and NO prices for a market"""
         
-        Args:
-            query: Search string
-            markets: List of markets to search
-            
-        Returns:
-            Filtered list of markets
-        """
-        query_lower = query.lower()
-        return [m for m in markets if query_lower in m.question.lower()]
-
-
-class MarketMonitor:
-    """Monitors market prices in real-time"""
-    
-    def __init__(self, ws_url: str = "wss://ws-subscriptions-clob.polymarket.com/ws/market"):
-        self.ws_url = ws_url
-        self.running = False
-        self.websocket = None
-        self.price_callback: Optional[Callable] = None
-    
-    async def connect(self, market_id: str, callback: Callable[[float, float], None]):
-        """
-        Connect to WebSocket and monitor prices
+        # Fetch YES price
+        yes_data = await self.get_live_prices(market.yes_token_id)
+        yes_price = yes_data['price'] if yes_data else 0.50
         
-        Args:
-            market_id: Market to monitor
-            callback: Function called with (yes_price, no_price) on updates
-        """
-        self.price_callback = callback
-        self.running = True
+        # Fetch NO price
+        no_data = await self.get_live_prices(market.no_token_id)
+        no_price = no_data['price'] if no_data else 0.50
+        
+        return yes_price, no_price
+    
+    async def get_orderbook(self, token_id: str) -> Optional[Dict]:
+        """Get full orderbook for a token"""
+        await self._ensure_session()
         
         try:
-            # For now, simulate price updates since WebSocket structure may vary
-            # In production, you'd connect to actual Polymarket WebSocket
-            logger.info(f"Starting price monitoring for market {market_id}")
+            url = f"{self.clob_api}/book"
+            params = {"token_id": token_id}
             
-            while self.running:
-                # Simulate price updates (replace with actual WebSocket in production)
-                # This is a placeholder for demo mode
-                await asyncio.sleep(0.5)  # Update every 500ms
+            async with self.session.get(url, params=params) as response:
+                if response.status != 200:
+                    return None
                 
-                # In real implementation, parse WebSocket messages here
-                # For now, this will be driven by manual price updates
+                data = await response.json()
+                return {
+                    'bids': data.get('bids', []),
+                    'asks': data.get('asks', [])
+                }
                 
         except Exception as e:
-            logger.error(f"WebSocket error: {e}")
-        finally:
-            await self.disconnect()
+            logger.debug(f"Error fetching orderbook: {e}")
+            return None
     
-    async def disconnect(self):
-        """Disconnect from WebSocket"""
-        self.running = False
-        if self.websocket:
-            await self.websocket.close()
-            self.websocket = None
-        logger.info("Disconnected from price feed")
+    async def place_order(
+        self, 
+        token_id: str, 
+        side: str, 
+        amount: float, 
+        price: float
+    ) -> Dict:
+        """
+        Simulate order placement (DEMO MODE)
+        In production, this would use py-clob-client to place real orders
+        """
+        logger.info(f"[DEMO] Placing {side.upper()} order:")
+        logger.info(f"[DEMO]   Token: {token_id}")
+        logger.info(f"[DEMO]   Amount: ${amount:.4f}")
+        logger.info(f"[DEMO]   Price: ${price:.4f}")
+        
+        # Simulate order success
+        return {
+            'success': True,
+            'order_id': f"demo_{token_id[:8]}",
+            'side': side,
+            'amount': amount,
+            'price': price,
+            'status': 'filled'
+        }
     
-    def update_prices(self, yes_price: float, no_price: float):
-        """Manual price update (for testing/demo)"""
-        if self.price_callback and self.running:
-            self.price_callback(yes_price, no_price)
+    async def execute_arbitrage_trade(
+        self,
+        market: Market,
+        yes_price: float,
+        no_price: float,
+        amount: float = 1.0
+    ) -> Dict:
+        """
+        Execute arbitrage trade (DEMO MODE)
+        Buys YES and NO shares, simulates merge
+        """
+        logger.info(f"[DEMO] Executing arbitrage on: {market.question}")
+        
+        # Buy YES share
+        yes_order = await self.place_order(
+            market.yes_token_id,
+            'buy',
+            amount,
+            yes_price
+        )
+        
+        # Buy NO share
+        no_order = await self.place_order(
+            market.no_token_id,
+            'buy',
+            amount,
+            no_price
+        )
+        
+        # Simulate merge (in real mode, this would be a blockchain transaction)
+        logger.info(f"[DEMO] Merging YES + NO positions...")
+        logger.info(f"[DEMO] Received: ${amount:.4f}")
+        
+        return {
+            'yes_order': yes_order,
+            'no_order': no_order,
+            'merge_amount': amount,
+            'total_cost': yes_price + no_price,
+            'profit': amount - (yes_price + no_price)
+        }

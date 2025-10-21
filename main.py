@@ -8,14 +8,54 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from src.gui.main_window import run_gui
-from src.utils.logger import setup_logger
 
-logger = setup_logger("arbitrage")
+def check_dependencies():
+    """Check if required dependencies are installed"""
+    missing = []
+    
+    try:
+        import PyQt6
+    except ImportError:
+        missing.append("PyQt6")
+    
+    try:
+        import aiohttp
+    except ImportError:
+        missing.append("aiohttp")
+    
+    try:
+        import yaml
+    except ImportError:
+        missing.append("pyyaml")
+    
+    if missing:
+        print("\n" + "=" * 60)
+        print("❌ MISSING DEPENDENCIES")
+        print("=" * 60)
+        print("\nThe following required packages are not installed:")
+        for pkg in missing:
+            print(f"  • {pkg}")
+        print("\n📦 To install all dependencies, run:")
+        print("\n  pip install -r requirements.txt")
+        print("\nOr install individually:")
+        print("\n  pip install PyQt6 aiohttp pyyaml python-dotenv")
+        print("\n" + "=" * 60)
+        print("\n💡 See INSTALL.md for detailed installation guide")
+        print("=" * 60 + "\n")
+        sys.exit(1)
 
 
 def main():
     """Main entry point"""
+    # Check dependencies first
+    check_dependencies()
+    
+    # Import after checking dependencies
+    from src.gui.main_window import run_gui
+    from src.utils.logger import setup_logger
+    
+    logger = setup_logger("arbitrage")
+    
     logger.info("=" * 60)
     logger.info("⚡ POLYMARKET ARBITRAGE BOT")
     logger.info("=" * 60)

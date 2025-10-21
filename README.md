@@ -23,20 +23,43 @@ This bot monitors Polymarket markets for **arbitrage opportunities** where buyin
 
 ## 🚀 Quick Start
 
-### Installation
+### 1. Install Dependencies (Required!)
 
+**Windows - Easy Way:**
 ```bash
-# Install Python 3.11+
-# Download from python.org if needed
+# Double-click: setup.bat
+# Or run in Command Prompt:
+setup.bat
+```
 
-# Install dependencies
+**Windows - Manual:**
+```bash
 pip install -r requirements.txt
+```
 
-# Run the app
+**Mac/Linux:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+### 2. Run the App
+
+**Windows:**
+```bash
+# Double-click: run.bat
+# Or run:
 python main.py
 ```
 
+**Mac/Linux:**
+```bash
+python3 main.py
+```
+
 The GUI will open and automatically fetch markets from Polymarket.
+
+> **💡 Tip:** If you get "No module named 'PyQt6'" error, you didn't install dependencies. See `INSTALL.md` for detailed help.
 
 ### Usage
 
@@ -223,11 +246,21 @@ polymarket-arbitrage-tool/
 - Polymarket API may be rate-limiting
 - Check selected market is still active
 
+**"No module named 'PyQt6'" error?**
+- You forgot to install dependencies!
+- Run: `pip install -r requirements.txt`
+- Or: `pip install PyQt6 aiohttp pyyaml python-dotenv`
+
 **Dependencies won't install?**
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+**Still having issues?**
+- See `INSTALL.md` for detailed troubleshooting
+- Make sure you have Python 3.11+ installed
+- Try installing in a virtual environment
 
 ---
 

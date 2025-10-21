@@ -1,42 +1,32 @@
-# Polymarket Arbitrage Tool Configuration
+# ⚡ Polymarket Arbitrage Bot Configuration
 
-# Application Settings
+# Application
 app:
   name: "Polymarket Arbitrage Tool"
   version: "1.0.0"
-  window_width: 900
-  window_height: 700
+  window_width: 1000
+  window_height: 750
 
-# Polymarket API
+# Polymarket API Endpoints
 polymarket:
-  api_url: "https://clob.polymarket.com"
-  ws_url: "wss://ws-subscriptions-clob.polymarket.com/ws/market"
   gamma_api: "https://gamma-api.polymarket.com"
+  clob_api: "https://clob.polymarket.com"
   
 # Trading Settings
 trading:
-  min_profit_threshold: 0.01  # Minimum $0.01 profit
-  trading_fee: 0.02           # 2% Polymarket fee
-  gas_estimate: 0.01          # ~$0.01 gas cost estimate
-  max_position_size: 100.0    # Maximum $100 per trade
+  min_profit_threshold: 0.01  # Minimum profit to execute ($0.01)
+  trading_fee: 0.02           # Polymarket trading fee (2%)
+  gas_estimate: 0.01          # Estimated gas cost ($0.01)
   
-# Demo Mode Settings
+# Demo Mode
 demo:
-  initial_balance: 1000.0     # Start with $1000 fake money
-  
-# Monitoring
-monitoring:
-  price_update_interval: 0.1  # Check every 100ms
-  reconnect_delay: 5          # Reconnect after 5 seconds if disconnected
+  initial_balance: 1000.0     # Starting balance (fake money)
   
 # UI Settings
 ui:
-  theme: "light"              # light or dark
-  show_notifications: true
-  auto_execute: true          # Auto-execute arbitrage in demo mode
+  auto_execute: true          # Auto-execute when arbitrage detected
   
 # Logging
 logging:
   level: "INFO"               # DEBUG, INFO, WARNING, ERROR
   log_to_file: true
-  log_file: "arbitrage.log"

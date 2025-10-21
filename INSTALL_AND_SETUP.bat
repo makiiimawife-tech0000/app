@@ -4,13 +4,8 @@ REM  Polymarket Arbitrage Bot - Installer
 REM  Double-click to install and run!
 REM ============================================
 
-REM Check for admin rights and request elevation if needed
-net session >nul 2>&1
-if %errorLevel% neq 0 (
-    echo Requesting administrator privileges...
-    powershell -Command "Start-Process '%~f0' -Verb RunAs"
-    exit /b
-)
+REM Note: Admin rights not required for user installation
+REM pip will install to user directory if system site-packages not writable
 
 title Polymarket Arbitrage Bot - Installation
 color 0A
@@ -66,18 +61,26 @@ echo.
 echo Installing core dependencies (demo mode)...
 echo.
 
-cd polymarket-arbitrage-bot\app
-python -m pip install -r requirements.txt --quiet
+cd /d "%~dp0polymarket-arbitrage-bot\app"
+if not exist requirements.txt (
+    echo [X] requirements.txt not found!
+    echo Current directory: %CD%
+    pause
+    exit /b 1
+)
+
+echo Installing from requirements.txt...
+python -m pip install -r requirements.txt --user --quiet
 
 if errorlevel 1 (
     echo [!] Trying individual install...
-    python -m pip install PyQt6
-    python -m pip install aiohttp
-    python -m pip install pyyaml
-    python -m pip install python-dotenv
+    python -m pip install --user PyQt6>=6.6.0
+    python -m pip install --user aiohttp>=3.9.0
+    python -m pip install --user pyyaml>=6.0.0
+    python -m pip install --user python-dotenv>=1.0.0
 )
 
-cd ..\..
+cd /d "%~dp0".
 
 echo.
 echo [OK] Packages installed!

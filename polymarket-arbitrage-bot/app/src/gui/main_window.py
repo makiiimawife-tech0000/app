@@ -57,17 +57,26 @@ class PriceUpdateThread(QThread):
         
         try:
             while self.running:
+                if not self.running:  # Check again in case stopped during sleep
+                    break
+                    
                 # Fetch real prices from Polymarket
                 yes_price, no_price = loop.run_until_complete(
                     self.api.get_market_prices(self.market)
                 )
-                self.prices_updated.emit(yes_price, no_price)
+                
+                if self.running:  # Only emit if still running
+                    self.prices_updated.emit(yes_price, no_price)
                 
                 # Update every 2 seconds to avoid rate limiting
-                loop.run_until_complete(asyncio.sleep(2))
+                for _ in range(20):  # Check every 0.1s for 2 seconds total
+                    if not self.running:
+                        break
+                    loop.run_until_complete(asyncio.sleep(0.1))
                 
         except Exception as e:
-            self.error_occurred.emit(str(e))
+            if self.running:  # Only emit error if still running
+                self.error_occurred.emit(str(e))
         finally:
             loop.close()
     
@@ -492,16 +501,27 @@ class MainWindow(QMainWindow):
     
     def closeEvent(self, event):
         """Handle window close"""
-        if self.price_thread:
-            self.price_thread.stop()
-            self.price_thread.wait()
-        
-        # Close API session
-        loop = asyncio.new_event_loop()
-        loop.run_until_complete(self.api.close())
-        loop.close()
-        
-        event.accept()
+        try:
+            # Stop monitoring thread
+            if self.price_thread:
+                self.price_thread.stop()
+                self.price_thread.wait(5000)  # Wait up to 5 seconds
+                if self.price_thread.isRunning():
+                    self.price_thread.terminate()
+            
+            # Close API session
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                loop.run_until_complete(self.api.close())
+                loop.close()
+            except Exception as e:
+                logger.debug(f"Error closing API session: {e}")
+            
+        except Exception as e:
+            logger.error(f"Error during shutdown: {e}")
+        finally:
+            event.accept()
 
 
 def run_gui():

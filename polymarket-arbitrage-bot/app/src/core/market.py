@@ -1,6 +1,7 @@
 """Market data fetching and real-time price monitoring"""
 import asyncio
 import aiohttp
+import json
 from typing import List, Dict, Optional, Callable
 from dataclasses import dataclass
 from ..utils.logger import setup_logger
@@ -50,13 +51,13 @@ class PolymarketAPI:
         try:
             url = f"{self.gamma_api}/markets"
             params = {
-                "limit": limit,
+                "limit": min(limit * 3, 150),  # Fetch more to account for filtering
                 "active": "true",
                 "closed": "false",
                 "archived": "false"
             }
             
-            logger.info(f"Fetching {limit} markets from Polymarket...")
+            logger.info(f"Fetching markets from Polymarket...")
             
             async with self.session.get(url, params=params) as response:
                 if response.status != 200:
@@ -65,33 +66,83 @@ class PolymarketAPI:
                 
                 data = await response.json()
                 markets = []
+                processed = 0
                 
-                for item in data[:limit]:
+                # Process markets to get detailed info with token IDs
+                for item in data:
+                    if len(markets) >= limit:
+                        break
+                        
                     try:
-                        # Extract market data
                         market_id = item.get('id', '')
-                        condition_id = item.get('condition_id', item.get('conditionId', ''))
                         question = item.get('question', 'Unknown Market')
+                        processed += 1
                         
-                        # Get token IDs from outcomes
-                        tokens = item.get('tokens', [])
-                        yes_token = tokens[0].get('token_id', '') if len(tokens) > 0 else ''
-                        no_token = tokens[1].get('token_id', '') if len(tokens) > 1 else ''
+                        # Skip if essential data is missing
+                        if not market_id or not question:
+                            continue
                         
-                        market = Market(
-                            id=market_id,
-                            question=question,
-                            condition_id=condition_id,
-                            yes_token_id=yes_token,
-                            no_token_id=no_token,
-                            active=item.get('active', True)
-                        )
-                        markets.append(market)
+                        # Skip inactive or closed markets
+                        if not item.get('active', True) or item.get('closed', False):
+                            continue
+                        
+                        # Get detailed market info to fetch token IDs
+                        detail_url = f"{self.gamma_api}/markets/{market_id}"
+                        try:
+                            async with self.session.get(detail_url) as detail_response:
+                                if detail_response.status != 200:
+                                    continue
+                                
+                                detail = await detail_response.json()
+                                
+                                # Extract token IDs from clobTokenIds
+                                clob_token_ids = detail.get('clobTokenIds', [])
+                                if not clob_token_ids or len(clob_token_ids) < 2:
+                                    continue
+                                
+                                # Parse outcomes to determine which token is YES/NO
+                                outcomes_raw = detail.get('outcomes', [])
+                                if isinstance(outcomes_raw, str):
+                                    try:
+                                        outcomes = json.loads(outcomes_raw)
+                                    except json.JSONDecodeError:
+                                        outcomes = ['Yes', 'No']  # Default fallback
+                                else:
+                                    outcomes = outcomes_raw
+                                
+                                # Map tokens to YES/NO based on outcomes
+                                yes_token = clob_token_ids[0]  # Default: first is YES
+                                no_token = clob_token_ids[1]   # Default: second is NO
+                                
+                                # Try to be smarter about token mapping
+                                if len(outcomes) >= 2:
+                                    for i, outcome in enumerate(outcomes[:2]):
+                                        outcome_text = str(outcome).lower()
+                                        if i < len(clob_token_ids):
+                                            if 'yes' in outcome_text:
+                                                yes_token = clob_token_ids[i]
+                                            elif 'no' in outcome_text:
+                                                no_token = clob_token_ids[i]
+                                
+                                market = Market(
+                                    id=market_id,
+                                    question=question,
+                                    condition_id=detail.get('conditionId', ''),
+                                    yes_token_id=yes_token,
+                                    no_token_id=no_token,
+                                    active=detail.get('active', True)
+                                )
+                                markets.append(market)
+                                
+                        except Exception as e:
+                            logger.debug(f"Error fetching details for market {market_id}: {e}")
+                            continue
+                            
                     except Exception as e:
-                        logger.warning(f"Error parsing market: {e}")
+                        logger.debug(f"Error processing market: {e}")
                         continue
                 
-                logger.info(f"✓ Fetched {len(markets)} markets")
+                logger.info(f"✓ Fetched {len(markets)} markets with token IDs (processed {processed})")
                 return markets
                 
         except Exception as e:
@@ -108,12 +159,18 @@ class PolymarketAPI:
             
             async with self.session.get(url, params=params) as response:
                 if response.status != 200:
+                    logger.debug(f"Price API returned status {response.status} for token {token_id}")
                     return None
                 
                 data = await response.json()
                 
                 # Extract mid price (average of bid/ask)
                 mid_price = float(data.get('mid', data.get('price', 0)))
+                
+                # Validate price is reasonable (between 0 and 1)
+                if not (0 <= mid_price <= 1):
+                    logger.warning(f"Invalid price {mid_price} for token {token_id}")
+                    return None
                 
                 return {
                     'price': mid_price,
@@ -128,13 +185,22 @@ class PolymarketAPI:
     async def get_market_prices(self, market: Market) -> tuple[float, float]:
         """Get current YES and NO prices for a market"""
         
+        # Validate token IDs
+        if not market.yes_token_id or not market.no_token_id:
+            logger.warning(f"Missing token IDs for market {market.id}")
+            return 0.50, 0.50
+        
         # Fetch YES price
         yes_data = await self.get_live_prices(market.yes_token_id)
         yes_price = yes_data['price'] if yes_data else 0.50
         
-        # Fetch NO price
+        # Fetch NO price  
         no_data = await self.get_live_prices(market.no_token_id)
         no_price = no_data['price'] if no_data else 0.50
+        
+        # Ensure prices are reasonable
+        yes_price = max(0.01, min(0.99, yes_price))
+        no_price = max(0.01, min(0.99, no_price))
         
         return yes_price, no_price
     

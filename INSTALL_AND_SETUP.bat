@@ -4,6 +4,14 @@ REM  Polymarket Arbitrage Bot - Installer
 REM  Double-click to install and run!
 REM ============================================
 
+REM Check for admin rights and request elevation if needed
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo Requesting administrator privileges...
+    powershell -Command "Start-Process '%~f0' -Verb RunAs"
+    exit /b
+)
+
 title Polymarket Arbitrage Bot - Installation
 color 0A
 

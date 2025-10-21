@@ -1,0 +1,100 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║       ⚡ POLYMARKET ARBITRAGE BOT ⚡                        ║
+║                                                            ║
+║  START HERE - First Time Setup                             ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+
+🚀 INSTALLATION (FIRST TIME)
+═══════════════════════════════════════════════════════════
+
+Go to the PARENT FOLDER and double-click:
+
+    ► INSTALL_AND_SETUP.bat
+
+Wait 2-3 minutes while it installs everything.
+
+
+🎮 RUNNING THE APP (AFTER INSTALL)
+═══════════════════════════════════════════════════════════
+
+Option 1: Desktop Shortcut
+  → "Polymarket Arbitrage Bot" on your desktop
+  
+Option 2: Manual
+  → app\launcher.bat
+
+
+📖 HOW TO USE
+═══════════════════════════════════════════════════════════
+
+1. Markets load automatically (2-5 sec)
+2. Search for a market (type anything)
+3. Click to select a market
+4. Click "▶ Start Monitoring"
+5. Watch real-time prices
+6. Arbitrage auto-executes with demo money
+7. Check profits at bottom!
+
+
+💰 WHAT IS ARBITRAGE?
+═══════════════════════════════════════════════════════════
+
+When YES + NO < $1.00, you profit by:
+  1. Buy YES share
+  2. Buy NO share  
+  3. Merge → Get $1.00
+  4. Keep the difference!
+
+Example:
+  YES: $0.47
+  NO:  $0.50
+  ─────────
+  Cost: $0.97
+  Get:  $1.00
+  Profit: $0.03 (minus fees)
+
+
+🎮 DEMO MODE
+═══════════════════════════════════════════════════════════
+
+✓ REAL Polymarket prices
+✓ FAKE money ($1000)
+✓ 100% safe, no risk
+✓ No login required
+
+
+📂 FILES
+═══════════════════════════════════════════════════════════
+
+app/launcher.bat       ← Run the app
+app/main.py            ← Main program
+app/config.yaml        ← Settings
+app/docs/              ← Documentation
+README.md              ← Full docs
+
+
+⚠️ TROUBLESHOOTING
+═══════════════════════════════════════════════════════════
+
+"Python not found"
+  → Install Python 3.11+ from python.org
+  → Check "Add Python to PATH"
+  → Run installer again
+
+"Installer won't run"
+  → Right-click → "Run as Administrator"
+
+"Markets not loading"
+  → Check internet
+  → Click "🔄 Refresh"
+
+
+═══════════════════════════════════════════════════════════
+
+Ready? Go to parent folder and run:
+  INSTALL_AND_SETUP.bat
+
+Happy arbitraging! 💰

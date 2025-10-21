@@ -10,7 +10,14 @@ class Config:
     """Application configuration"""
     
     def __init__(self, config_path: str = "config.yaml"):
-        self.config_path = Path(config_path)
+        # Handle relative paths by making them relative to the app directory
+        if not os.path.isabs(config_path):
+            # Get the directory where this file is located
+            current_dir = Path(__file__).parent.parent.parent
+            self.config_path = current_dir / config_path
+        else:
+            self.config_path = Path(config_path)
+        
         self._config: Dict[str, Any] = {}
         self.load()
         

@@ -64,12 +64,29 @@ def main():
     logger.info("=" * 60)
     
     try:
+        # Check if config file exists
+        from pathlib import Path
+        config_path = Path(__file__).parent / "config.yaml"
+        if not config_path.exists():
+            logger.error(f"Configuration file not found: {config_path}")
+            print(f"\n❌ ERROR: Configuration file missing!")
+            print(f"Expected location: {config_path}")
+            print(f"Please ensure config.yaml exists in the app directory.")
+            sys.exit(1)
+        
         run_gui()
     except KeyboardInterrupt:
         logger.info("\n\nShutdown requested by user")
         sys.exit(0)
+    except ImportError as e:
+        logger.error(f"Import error: {e}")
+        print(f"\n❌ IMPORT ERROR: {e}")
+        print(f"Please run the installer: INSTALL_AND_SETUP.bat")
+        sys.exit(1)
     except Exception as e:
         logger.error(f"Application error: {e}", exc_info=True)
+        print(f"\n❌ APPLICATION ERROR: {e}")
+        print(f"Check the log file for more details.")
         sys.exit(1)
 
 

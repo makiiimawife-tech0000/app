@@ -3,13 +3,7 @@ REM ============================================
 REM  Polymarket Arbitrage Bot - Launcher
 REM ============================================
 
-REM Check for admin rights and request elevation if needed
-net session >nul 2>&1
-if %errorLevel% neq 0 (
-    echo Requesting administrator privileges...
-    powershell -Command "Start-Process '%~f0' -Verb RunAs"
-    exit /b
-)
+REM Admin rights not required for running the application
 
 title Polymarket Arbitrage Bot
 
@@ -17,15 +11,18 @@ REM Change to the directory where this script is located
 cd /d "%~dp0"
 
 REM Check dependencies
-python -c "import PyQt6" 2>nul
+python -c "import PyQt6, aiohttp, yaml" 2>nul
 if errorlevel 1 (
     echo.
     echo ========================================
     echo   MISSING DEPENDENCIES
     echo ========================================
     echo.
-    echo Please run the installer:
-    echo INSTALL_AND_SETUP.bat
+    echo Please run the installer first:
+    echo %~dp0..\..\INSTALL_AND_SETUP.bat
+    echo.
+    echo Or install manually:
+    echo pip install --user PyQt6 aiohttp pyyaml python-dotenv
     echo.
     pause
     exit /b 1

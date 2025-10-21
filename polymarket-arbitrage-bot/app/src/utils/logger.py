@@ -26,7 +26,9 @@ def setup_logger(name: str = "arbitrage", level: str = "INFO", log_to_file: bool
     
     # File handler
     if log_to_file:
-        log_dir = Path("logs")
+        # Create logs directory relative to the app directory
+        app_dir = Path(__file__).parent.parent.parent
+        log_dir = app_dir / "logs"
         log_dir.mkdir(exist_ok=True)
         
         log_file = log_dir / f"arbitrage_{datetime.now().strftime('%Y%m%d')}.log"

@@ -15,7 +15,7 @@ INSTALL_AND_SETUP.bat
 
 That's it! The installer will:
 - ✅ Check for Python
-- ✅ Install all packages (~100MB)
+- ✅ Install all packages (~50MB, 1-2 min)
 - ✅ Create desktop shortcut
 - ✅ Launch the app
 

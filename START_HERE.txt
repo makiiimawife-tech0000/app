@@ -1,0 +1,56 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║       ⚡ POLYMARKET ARBITRAGE BOT ⚡                        ║
+║                                                            ║
+║  Welcome! Here's how to get started:                       ║
+║                                                            ║
+╠════════════════════════════════════════════════════════════╣
+║                                                            ║
+║  📋 FIRST TIME SETUP:                                      ║
+║                                                            ║
+║     WINDOWS:                                               ║
+║     → Double-click:  INSTALL_AND_SETUP.bat                 ║
+║                                                            ║
+║     MAC/LINUX:                                             ║
+║     → Right-click INSTALL_AND_SETUP.sh                     ║
+║     → Select "Run as program" or open terminal and run:    ║
+║       ./INSTALL_AND_SETUP.sh                               ║
+║                                                            ║
+║     This will:                                             ║
+║     ✓ Check for Python                                    ║
+║     ✓ Install all requirements                            ║
+║     ✓ Create desktop shortcut                             ║
+║     ✓ Launch the app                                      ║
+║                                                            ║
+╠════════════════════════════════════════════════════════════╣
+║                                                            ║
+║  🚀 AFTER SETUP:                                           ║
+║                                                            ║
+║     WINDOWS:                                               ║
+║     → Desktop shortcut: "Polymarket Arbitrage Bot"         ║
+║     → Or double-click:  launcher.bat                       ║
+║                                                            ║
+║     MAC/LINUX:                                             ║
+║     → Desktop shortcut (if created)                        ║
+║     → Or run:  ./launcher.sh                               ║
+║                                                            ║
+╠════════════════════════════════════════════════════════════╣
+║                                                            ║
+║  📚 NEED HELP?                                             ║
+║                                                            ║
+║     Read:  README.md                                       ║
+║                                                            ║
+╠════════════════════════════════════════════════════════════╣
+║                                                            ║
+║  🎮 DEMO MODE:                                             ║
+║                                                            ║
+║     • Uses real Polymarket prices                          ║
+║     • Trades with fake money ($1000)                       ║
+║     • 100% safe for testing                                ║
+║     • No login required                                    ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+💡 WINDOWS TIP: If you have any issues, right-click 
+                INSTALL_AND_SETUP.bat and select 
+                "Run as Administrator"

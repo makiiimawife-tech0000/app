@@ -1,0 +1,69 @@
+╔════════════════════════════════════════════════════════╗
+║                                                        ║
+║  ⚡ POLYMARKET ARBITRAGE BOT - PROJECT INFO            ║
+║                                                        ║
+╠════════════════════════════════════════════════════════╣
+║                                                        ║
+║  📁 PROJECT STRUCTURE                                  ║
+║                                                        ║
+║  Installation Scripts:                                 ║
+║  ├── INSTALL_AND_SETUP.bat    (Windows installer)      ║
+║  ├── INSTALL_AND_SETUP.sh     (Mac/Linux installer)    ║
+║  ├── launcher.bat             (Windows launcher)       ║
+║  └── launcher.sh              (Mac/Linux launcher)     ║
+║                                                        ║
+║  Documentation:                                        ║
+║  ├── START_HERE.txt           (Quick start guide)      ║
+║  ├── README.md                (Full documentation)     ║
+║  ├── HOW_TO_INSTALL.md        (Install guide)          ║
+║  └── QUICK_REFERENCE.md       (Cheat sheet)            ║
+║                                                        ║
+║  Application Files:                                    ║
+║  ├── main.py                  (Entry point)            ║
+║  ├── config.yaml              (Settings)               ║
+║  ├── requirements.txt         (Dependencies)           ║
+║  └── src/                     (Source code)            ║
+║      ├── core/                (Business logic)         ║
+║      │   ├── market.py        (Polymarket API)         ║
+║      │   ├── arbitrage.py     (Detection logic)        ║
+║      │   └── demo_mode.py     (Demo trading)           ║
+║      ├── gui/                 (User interface)         ║
+║      │   └── main_window.py   (Main GUI)               ║
+║      └── utils/               (Utilities)              ║
+║          ├── config.py        (Config loader)          ║
+║          └── logger.py        (Logging)                ║
+║                                                        ║
+╠════════════════════════════════════════════════════════╣
+║                                                        ║
+║  🎯 FEATURES                                           ║
+║                                                        ║
+║  ✓ One-click installation                             ║
+║  ✓ Automatic desktop shortcut creation                ║
+║  ✓ Real-time Polymarket price fetching                ║
+║  ✓ Automatic arbitrage detection                      ║
+║  ✓ Demo mode with fake money                          ║
+║  ✓ Clean desktop GUI (PyQt6)                          ║
+║  ✓ Activity logging                                   ║
+║  ✓ Profit tracking                                    ║
+║                                                        ║
+╠════════════════════════════════════════════════════════╣
+║                                                        ║
+║  📊 TECHNICAL DETAILS                                  ║
+║                                                        ║
+║  Language: Python 3.11+                                ║
+║  GUI Framework: PyQt6                                  ║
+║  API Client: aiohttp (async)                           ║
+║  Total Code: ~1,100 lines                              ║
+║  Dependencies: 5 packages (~100MB)                     ║
+║                                                        ║
+╠════════════════════════════════════════════════════════╣
+║                                                        ║
+║  🚀 QUICK START                                        ║
+║                                                        ║
+║  1. Run: INSTALL_AND_SETUP.bat (or .sh)                ║
+║  2. Wait for installation to complete                  ║
+║  3. Use desktop shortcut to launch                     ║
+║  4. Select a market and start monitoring               ║
+║  5. Watch for arbitrage opportunities!                 ║
+║                                                        ║
+╚════════════════════════════════════════════════════════╝

@@ -4,6 +4,9 @@
 
 Real-time price monitoring • Automatic arbitrage detection • Demo mode with fake money
 
+> **🎯 NEW USER?** Just double-click `INSTALL_AND_SETUP.bat` (Windows) or run `./INSTALL_AND_SETUP.sh` (Mac/Linux)  
+> It installs everything automatically and creates a desktop shortcut!
+
 ---
 
 ## 🎯 What It Does
@@ -23,43 +26,52 @@ This bot monitors Polymarket markets for **arbitrage opportunities** where buyin
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies (Required!)
+### ⚡ One-Click Install
 
-**Windows - Easy Way:**
-```bash
-# Double-click: setup.bat
-# Or run in Command Prompt:
-setup.bat
-```
-
-**Windows - Manual:**
-```bash
-pip install -r requirements.txt
-```
+**Windows:**
+1. Double-click: `INSTALL_AND_SETUP.bat`
+2. Wait 2-3 minutes
+3. Done! Use desktop shortcut or `launcher.bat`
 
 **Mac/Linux:**
-```bash
-chmod +x setup.sh
-./setup.sh
-```
+1. Run: `./INSTALL_AND_SETUP.sh`
+2. Wait 2-3 minutes
+3. Done! Use `./launcher.sh`
 
-### 2. Run the App
+**The installer automatically:**
+- ✅ Checks for Python (guides you if missing)
+- ✅ Installs all requirements (~100MB)
+- ✅ Creates desktop shortcut
+- ✅ Launches the app
+
+---
+
+### 📖 First Time Using the App?
+
+After installation:
+
+1. **Markets load automatically** (2-5 seconds)
+2. **Search for a market** (e.g., "Trump", "Bitcoin")
+3. **Click a market** to select it
+4. **Click "▶ Start Monitoring"**
+5. **Watch real-time prices** from Polymarket
+6. **Arbitrage detected?** App shows profit and auto-executes (demo money)
+
+---
+
+### 🔧 Manual Installation (Advanced)
 
 **Windows:**
 ```bash
-# Double-click: run.bat
-# Or run:
+pip install -r requirements.txt
 python main.py
 ```
 
 **Mac/Linux:**
 ```bash
+pip3 install -r requirements.txt
 python3 main.py
 ```
-
-The GUI will open and automatically fetch markets from Polymarket.
-
-> **💡 Tip:** If you get "No module named 'PyQt6'" error, you didn't install dependencies. See `INSTALL.md` for detailed help.
 
 ### Usage
 
@@ -247,20 +259,21 @@ polymarket-arbitrage-tool/
 - Check selected market is still active
 
 **"No module named 'PyQt6'" error?**
-- You forgot to install dependencies!
-- Run: `pip install -r requirements.txt`
-- Or: `pip install PyQt6 aiohttp pyyaml python-dotenv`
+- Run: `INSTALL_AND_SETUP.bat` (double-click it!)
+- This installs everything automatically
 
-**Dependencies won't install?**
-```bash
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
+**Python not installed?**
+- The setup script will detect this and guide you
+- Download from: https://www.python.org/downloads/
+- Make sure to check "Add Python to PATH" during install
+
+**Setup script won't run?**
+- Right-click `INSTALL_AND_SETUP.bat`
+- Select "Run as Administrator"
 
 **Still having issues?**
-- See `INSTALL.md` for detailed troubleshooting
 - Make sure you have Python 3.11+ installed
-- Try installing in a virtual environment
+- Try: `pip install -r requirements.txt` manually
 
 ---
 

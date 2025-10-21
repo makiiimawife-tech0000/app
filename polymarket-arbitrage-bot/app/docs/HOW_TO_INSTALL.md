@@ -41,15 +41,26 @@
 ## What Gets Installed
 
 The installer will install these Python packages:
-- **PyQt6** - Desktop GUI framework (~50MB)
+- **PyQt6** - Desktop GUI framework (~40MB)
 - **aiohttp** - Async HTTP client
 - **pyyaml** - Configuration parser
 - **python-dotenv** - Environment variables
+
+**Total download:** ~50MB  
+**Installation time:** 1-2 minutes
+
+### Optional Blockchain Dependencies (NOT Required for Demo Mode)
+
+The following packages are **NOT installed by default** because they require C++ build tools and are only needed for future real trading mode:
 - **py-clob-client** - Polymarket SDK
 - **web3** - Blockchain library
 
-**Total download:** ~100MB  
-**Installation time:** 2-3 minutes
+To install these later (if needed):
+```bash
+pip install -r requirements-blockchain.txt
+```
+
+**Note:** This requires C++ build tools on your system.
 
 ---
 
@@ -111,7 +122,7 @@ To remove the application:
 2. Delete the desktop shortcut
 3. (Optional) Uninstall Python packages:
    ```bash
-   pip uninstall PyQt6 aiohttp pyyaml python-dotenv py-clob-client web3
+   pip uninstall PyQt6 aiohttp pyyaml python-dotenv
    ```
 
 ---

@@ -1,0 +1,26 @@
+# ============================================
+# BLOCKCHAIN DEPENDENCIES (OPTIONAL)
+# ============================================
+# 
+# These packages are ONLY needed for real trading mode.
+# Demo mode works fine without these.
+#
+# WARNING: These packages require C++ build tools!
+# 
+# Windows users need:
+#   - Visual Studio Build Tools 2019+
+#   - Or Microsoft C++ Build Tools
+#   Download: https://visualstudio.microsoft.com/downloads/
+#
+# Linux users need:
+#   sudo apt-get install build-essential python3-dev
+#
+# Mac users need:
+#   xcode-select --install
+# ============================================
+
+# Polymarket SDK
+py-clob-client>=0.25.0
+
+# Blockchain library
+web3>=6.15.0

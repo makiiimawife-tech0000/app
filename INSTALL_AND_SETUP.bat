@@ -61,7 +61,9 @@ echo.
 REM ============================================
 REM Install packages
 REM ============================================
-echo [3/4] Installing packages (~100MB, 2-3 min)...
+echo [3/4] Installing packages (~50MB, 1-2 min)...
+echo.
+echo Installing core dependencies (demo mode)...
 echo.
 
 cd polymarket-arbitrage-bot\app
@@ -73,8 +75,6 @@ if errorlevel 1 (
     python -m pip install aiohttp
     python -m pip install pyyaml
     python -m pip install python-dotenv
-    python -m pip install py-clob-client
-    python -m pip install web3
 )
 
 cd ..\..

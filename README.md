@@ -48,4 +48,4 @@ See `polymarket-arbitrage-bot/README.md` for full documentation.
 
 ---
 
-**Windows only • Python 3.11+ • ~100MB**
+**Windows/Linux/Mac • Python 3.11+ • ~50MB**

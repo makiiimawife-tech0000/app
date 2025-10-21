@@ -8,8 +8,16 @@ aiohttp>=3.9.0
 pyyaml>=6.0.0
 python-dotenv>=1.0.0
 
-# Polymarket SDK (for future real mode)
-py-clob-client>=0.25.0
-
-# Blockchain (for future real mode)
-web3>=6.15.0
+# ============================================
+# OPTIONAL: Blockchain Dependencies
+# ============================================
+# These are NOT required for demo mode.
+# Only install if you plan to use real trading mode.
+# 
+# To install: pip install -r requirements-blockchain.txt
+#
+# Note: py-clob-client requires C++ build tools
+# which may not be available on all systems.
+# ============================================
+# py-clob-client>=0.25.0
+# web3>=6.15.0

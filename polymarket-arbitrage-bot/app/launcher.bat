@@ -18,7 +18,7 @@ cd /d "%~dp0"
 
 REM Check dependencies
 python -c "import PyQt6" 2>nul
-if errorlevel 1 (
+if %errorlevel% neq 0 (
     echo.
     echo ========================================
     echo   MISSING DEPENDENCIES
@@ -38,7 +38,7 @@ echo.
 python main.py
 
 REM Keep window open on error
-if errorlevel 1 (
+if %errorlevel% neq 0 (
     echo.
     echo ========================================
     echo   ERROR OCCURRED

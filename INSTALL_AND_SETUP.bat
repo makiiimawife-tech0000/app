@@ -30,7 +30,7 @@ echo [1/4] Checking Python...
 echo.
 
 python --version >nul 2>&1
-if errorlevel 1 (
+if %errorlevel% neq 0 (
     echo [X] Python NOT installed!
     echo.
     echo Opening download page...
@@ -69,7 +69,7 @@ echo.
 cd polymarket-arbitrage-bot\app
 python -m pip install -r requirements.txt --quiet
 
-if errorlevel 1 (
+if %errorlevel% neq 0 (
     echo [!] Trying individual install...
     python -m pip install PyQt6
     python -m pip install aiohttp

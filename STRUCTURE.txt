@@ -1,0 +1,55 @@
+╔════════════════════════════════════════════════════════╗
+║                                                        ║
+║  📁 POLYMARKET ARBITRAGE BOT - FILE STRUCTURE          ║
+║                                                        ║
+╚════════════════════════════════════════════════════════╝
+
+ROOT DIRECTORY (polymarket-arbitrage-bot/)
+│
+├── 🚀 INSTALL_AND_SETUP.bat    ← DOUBLE-CLICK TO INSTALL
+├── 📖 README.md                ← Main documentation
+│
+└── 📁 app/
+    │
+    ├── ⚡ launcher.bat          ← Run the application
+    ├── 🐍 main.py               ← Entry point
+    ├── ⚙️ config.yaml           ← Settings
+    ├── 📦 requirements.txt      ← Dependencies list
+    │
+    ├── 📁 src/
+    │   ├── 📁 core/             ← Business logic
+    │   │   ├── arbitrage.py     ← Detection algorithm
+    │   │   ├── market.py        ← Polymarket API
+    │   │   └── demo_mode.py     ← Demo trading
+    │   │
+    │   ├── 📁 gui/              ← User interface
+    │   │   └── main_window.py   ← Main window
+    │   │
+    │   └── 📁 utils/            ← Utilities
+    │       ├── config.py        ← Config loader
+    │       └── logger.py        ← Logging system
+    │
+    └── 📁 docs/                 ← Documentation
+        ├── README.md            ← Docs overview
+        ├── START_HERE.txt       ← Quick start
+        ├── HOW_TO_INSTALL.md    ← Install guide
+        ├── QUICK_REFERENCE.md   ← Cheat sheet
+        └── PROJECT_INFO.txt     ← Technical info
+
+
+╔════════════════════════════════════════════════════════╗
+║  HOW TO USE                                            ║
+╠════════════════════════════════════════════════════════╣
+║                                                        ║
+║  FIRST TIME:                                           ║
+║  → Double-click: INSTALL_AND_SETUP.bat                 ║
+║                                                        ║
+║  AFTER INSTALL:                                        ║
+║  → Use desktop shortcut                                ║
+║  → Or run: app\launcher.bat                            ║
+║                                                        ║
+╚════════════════════════════════════════════════════════╝
+
+TOTAL FILES: ~15 core files
+TOTAL CODE: ~1,100 lines of Python
+DEPENDENCIES: 5 packages (~100MB)

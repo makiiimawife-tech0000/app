@@ -20,6 +20,7 @@ dist/
 
 # Logs
 logs/
+app/logs/
 *.log
 
 # Environment
@@ -34,3 +35,6 @@ Thumbs.db
 *.ui.h
 moc_*.cpp
 ui_*.py
+
+# Installer artifacts
+CreateShortcut.vbs

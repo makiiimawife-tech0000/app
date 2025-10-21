@@ -1,248 +1,123 @@
 # ⚡ Polymarket Arbitrage Bot
 
-**Desktop application that detects and executes arbitrage opportunities on Polymarket.**
+**Automated arbitrage trading bot for Polymarket prediction markets.**
 
-Real-time price monitoring • Automatic arbitrage detection • Demo mode with fake money
-
-> **🎯 NEW USER?** Just double-click `INSTALL_AND_SETUP.bat` (Windows) or run `./INSTALL_AND_SETUP.sh` (Mac/Linux)  
-> It installs everything automatically and creates a desktop shortcut!
+Real-time price monitoring • Automatic opportunity detection • Safe demo mode
 
 ---
 
-## 🎯 What It Does
+## 🚀 Installation (Windows Only)
 
-This bot monitors Polymarket markets for **arbitrage opportunities** where buying YES + NO shares costs less than $1.00.
+### Step 1: Install
+**Double-click:**
+```
+INSTALL_AND_SETUP.bat
+```
 
-**The Strategy:**
-1. 📊 Monitor market prices in real-time
-2. 🔍 Detect when `YES + NO < $1.00` (after fees)
-3. 💰 Buy both YES and NO shares
-4. 🔄 Merge positions to receive $1.00
-5. ✨ Keep the profit
+The installer will:
+- ✅ Check for Python (helps install if missing)
+- ✅ Install all requirements (~100MB, 2-3 minutes)
+- ✅ Create desktop shortcut
+- ✅ Launch the app
 
-**Current Mode:** Demo (real Polymarket prices, fake money)
-
----
-
-## 🚀 Quick Start
-
-### ⚡ One-Click Install
-
-**Windows:**
-1. Double-click: `INSTALL_AND_SETUP.bat`
-2. Wait 2-3 minutes
-3. Done! Use desktop shortcut or `launcher.bat`
-
-**Mac/Linux:**
-1. Run: `./INSTALL_AND_SETUP.sh`
-2. Wait 2-3 minutes
-3. Done! Use `./launcher.sh`
-
-**The installer automatically:**
-- ✅ Checks for Python (guides you if missing)
-- ✅ Installs all requirements (~100MB)
-- ✅ Creates desktop shortcut
-- ✅ Launches the app
+### Step 2: Done!
+Use the desktop shortcut to open the app anytime:
+```
+Desktop → "Polymarket Arbitrage Bot"
+```
 
 ---
 
-### 📖 First Time Using the App?
-
-After installation:
+## 📖 How to Use
 
 1. **Markets load automatically** (2-5 seconds)
-2. **Search for a market** (e.g., "Trump", "Bitcoin")
-3. **Click a market** to select it
+2. **Search** for a market (e.g., "Trump", "Bitcoin", "AI")
+3. **Click** on a market to select it
 4. **Click "▶ Start Monitoring"**
-5. **Watch real-time prices** from Polymarket
-6. **Arbitrage detected?** App shows profit and auto-executes (demo money)
+5. **Watch** real-time prices from Polymarket
+6. **Arbitrage detected?** App auto-executes with demo money
 
 ---
 
-### 🔧 Manual Installation (Advanced)
+## 💰 What is Arbitrage?
 
-**Windows:**
-```bash
-pip install -r requirements.txt
-python main.py
+When buying **YES + NO shares < $1.00**, you can profit by:
+
+```
+1. Buy YES share at $0.47
+2. Buy NO share at $0.50
+3. Merge positions → receive $1.00
+4. Profit: $1.00 - $0.97 - fees = ~$0.01
 ```
 
-**Mac/Linux:**
-```bash
-pip3 install -r requirements.txt
-python3 main.py
-```
-
-### Usage
-
-1. **Wait for markets to load** (2-5 seconds)
-2. **Search and select a market** (e.g., "Trump", "Bitcoin")
-3. **Click "▶ Start Monitoring"**
-4. **Watch real-time prices** update from Polymarket
-5. **When arbitrage detected**, app shows profit opportunity
-6. **Auto-executes** with demo money (or click "⚡ Execute Now")
+The bot automatically finds and executes these opportunities.
 
 ---
 
 ## ✨ Features
 
-### Real Polymarket Integration
-- ✅ Fetches live markets via Gamma API
-- ✅ Real-time price updates via CLOB API
-- ✅ Actual orderbook data
-- ✅ ~2 second price refresh rate
-
-### Arbitrage Detection
-- ✅ Automatic opportunity detection
-- ✅ Accounts for 2% trading fees
-- ✅ Accounts for gas costs (~$0.01)
-- ✅ Configurable profit threshold
-
-### Demo Mode (Safe Testing)
-- ✅ Uses real Polymarket prices
-- ✅ Simulates order placement
-- ✅ Starts with $1,000 fake money
-- ✅ Tracks profits and trades
-- ✅ No risk, no login required
-
-### Clean Desktop GUI
-- ✅ Market search and selection
-- ✅ Live price display
-- ✅ Arbitrage alerts
-- ✅ Activity logging
-- ✅ Trade statistics
+- ✅ **Real-time prices** from Polymarket API
+- ✅ **Auto-detection** of arbitrage opportunities
+- ✅ **Demo mode** - fake money, real prices
+- ✅ **One-click install** - no manual setup
+- ✅ **Desktop shortcut** - easy access
+- ✅ **Clean GUI** - professional interface
 
 ---
 
-## 📊 How Arbitrage Works
+## 🎮 Demo Mode
 
-**Example:**
-```
-YES price:  $0.47
-NO price:   $0.50
-Total cost: $0.97
+**Current mode: DEMO (Safe Testing)**
 
-Trading fee (2%): $0.0194
-Gas cost:         $0.01
-Total cost:       $0.9994
-
-Merge payout:     $1.00
-Profit:           $0.0006 (0.06%)
-```
-
-The bot automatically detects these opportunities and executes trades.
+- Uses **REAL** Polymarket market data
+- Trades with **FAKE** money ($1000 starting balance)
+- 100% safe, no risk, no login required
+- Perfect for learning and testing strategies
 
 ---
 
 ## ⚙️ Configuration
 
-Edit `config.yaml` to customize:
+Edit `app/config.yaml`:
 
 ```yaml
 trading:
-  min_profit_threshold: 0.01    # Minimum $0.01 profit
-  trading_fee: 0.02             # 2% Polymarket fee
-  gas_estimate: 0.01            # Gas cost estimate
-  
+  min_profit_threshold: 0.01  # Min $0.01 profit
+  trading_fee: 0.02           # 2% Polymarket fee
+  gas_estimate: 0.01          # Gas cost
+
 demo:
-  initial_balance: 1000.0       # Starting demo balance
-  
+  initial_balance: 1000.0     # Starting balance
+
 ui:
-  auto_execute: true            # Auto-execute arbitrage
+  auto_execute: true          # Auto-trade
 ```
 
 ---
 
-## 🏗️ Project Structure
+## 📂 Project Structure
 
 ```
-polymarket-arbitrage-tool/
+polymarket-arbitrage-bot/
 │
-├── main.py                    # Entry point
-├── config.yaml                # Configuration
-├── requirements.txt           # Dependencies
+├── INSTALL_AND_SETUP.bat    ← DOUBLE-CLICK TO INSTALL
+├── README.md                ← This file
 │
-└── src/
-    ├── core/
-    │   ├── market.py          # Polymarket API integration
-    │   ├── arbitrage.py       # Detection algorithm
-    │   └── demo_mode.py       # Demo trading
+└── app/                     ← Everything lives here
+    ├── launcher.bat         ← Run the app
+    ├── main.py              ← Entry point
+    ├── config.yaml          ← Settings
+    ├── requirements.txt     ← Dependencies
     │
-    ├── gui/
-    │   └── main_window.py     # Desktop interface
+    ├── src/                 ← Source code
+    │   ├── core/            ← Trading logic
+    │   ├── gui/             ← User interface  
+    │   └── utils/           ← Utilities
     │
-    └── utils/
-        ├── config.py          # Config loader
-        └── logger.py          # Logging
+    └── docs/                ← Documentation
 ```
 
----
-
-## 🔒 Safety
-
-### Demo Mode (Current)
-- ✅ **100% safe** - uses fake money
-- ✅ **No login required** - no API keys needed
-- ✅ **Real prices** - from actual Polymarket
-- ✅ **Perfect for learning** and testing strategies
-
-### Real Mode (Future)
-- ⚠️ Would use real money
-- ⚠️ Requires API credentials
-- ⚠️ Blockchain transaction costs
-- ⚠️ Test thoroughly in demo first
-
----
-
-## 📈 Performance
-
-- **Market loading:** 2-5 seconds
-- **Price updates:** Every 2 seconds (real-time)
-- **Arbitrage detection:** < 1ms
-- **Order execution:** Instant (demo mode)
-
----
-
-## 🛠️ Requirements
-
-- Python 3.11+
-- Windows/Mac/Linux
-- Internet connection
-- ~50MB disk space
-
-**Dependencies:**
-- PyQt6 - Desktop GUI
-- aiohttp - Async HTTP
-- py-clob-client - Polymarket SDK
-- web3 - Blockchain (future use)
-
----
-
-## 📝 Example Session
-
-```
-[12:34:01] 🔄 Fetching markets from Polymarket...
-[12:34:03] ✓ Loaded 50 active markets
-[12:34:10] ✓ Selected: Will Trump win 2024?
-[12:34:12] ▶ Monitoring started
-[12:34:12] 📡 Fetching real-time prices from Polymarket...
-[12:34:14] YES: $0.4732 | NO: $0.5101
-[12:34:16] 🚨 ARBITRAGE OPPORTUNITY!
-[12:34:16] 💰 Profit: $0.0127 (1.29%)
-[12:34:16] ⚡ ARBITRAGE EXECUTED
-[12:34:16]    💰 Profit: $0.0127
-[12:34:16]    📊 Balance: $1000.01
-```
-
----
-
-## 🎮 Tips
-
-1. **Start with popular markets** - they have better liquidity
-2. **Monitor for a few minutes** - see how often opportunities appear
-3. **Understand the fees** - 2% trading fee + gas significantly reduces profit
-4. **Watch the spread** - tighter spreads = fewer opportunities
-5. **Test different thresholds** - adjust `min_profit_threshold` in config
+See `STRUCTURE.txt` for detailed file tree.
 
 ---
 
@@ -251,52 +126,53 @@ polymarket-arbitrage-tool/
 **Markets not loading?**
 - Check internet connection
 - Click "🔄 Refresh" button
-- Check logs in `logs/` folder
 
-**Prices not updating?**
-- Stop and restart monitoring
-- Polymarket API may be rate-limiting
-- Check selected market is still active
+**"No module named PyQt6" error?**
+- Run `INSTALL_AND_SETUP.bat` again
 
-**"No module named 'PyQt6'" error?**
-- Run: `INSTALL_AND_SETUP.bat` (double-click it!)
-- This installs everything automatically
+**Python not found?**
+- Install Python 3.11+ from python.org
+- ⚠️ Check "Add Python to PATH" during install
+- Run installer again
 
-**Python not installed?**
-- The setup script will detect this and guide you
-- Download from: https://www.python.org/downloads/
-- Make sure to check "Add Python to PATH" during install
-
-**Setup script won't run?**
+**Installer won't run?**
 - Right-click `INSTALL_AND_SETUP.bat`
 - Select "Run as Administrator"
 
-**Still having issues?**
-- Make sure you have Python 3.11+ installed
-- Try: `pip install -r requirements.txt` manually
+---
+
+## 📚 Documentation
+
+Full documentation in `app/docs/`:
+- **START_HERE.txt** - Quick start guide
+- **HOW_TO_INSTALL.md** - Detailed installation
+- **QUICK_REFERENCE.md** - Usage cheat sheet
+- **PROJECT_INFO.txt** - Technical details
 
 ---
 
-## 📚 Learn More
+## 🔒 Safety
 
-**Polymarket:**
-- [Polymarket Docs](https://docs.polymarket.com/)
-- [CLOB API](https://docs.polymarket.com/#clob-api)
+**Demo Mode:**
+- ✅ No real money
+- ✅ No login required
+- ✅ No risk whatsoever
+- ✅ Safe to experiment
 
-**Arbitrage:**
-- Arbitrage = risk-free profit from price differences
-- Works when YES + NO ≠ $1.00 (after fees)
-- Requires fast execution in competitive markets
+**Real Mode (Not Implemented):**
+- ⚠️ Would require API keys
+- ⚠️ Would use real money
+- ⚠️ Has transaction costs
+- ⚠️ Test thoroughly in demo first
 
 ---
 
-## 🤝 Contributing
+## 🛠️ Requirements
 
-This is a demo project for educational purposes. Feel free to:
-- Fork and experiment
-- Add new features
-- Improve the algorithm
-- Share your results
+- Windows 10/11
+- Python 3.11+
+- ~100MB disk space
+- Internet connection
 
 ---
 
@@ -304,11 +180,10 @@ This is a demo project for educational purposes. Feel free to:
 
 This software is for **educational purposes only**.
 
-- Demo mode uses fake money - completely safe
+- Demo mode uses fake money - safe for learning
 - Real trading involves financial risk
 - Not financial advice
 - Use at your own risk
-- Test thoroughly before using real money
 
 ---
 
